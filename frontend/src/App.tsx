@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+const API_URL = 'https://coupon-api-project1-rf79.vercel.app'
 type Coupon = {
   code: string
   discountPercent: number
