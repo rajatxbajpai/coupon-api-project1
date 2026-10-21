@@ -1,26 +1,74 @@
-# Coupon API (Node.js + Express + TypeScript)
+# Coupon API Project
 
-Create coupons, list them, and apply percentage discounts to order amounts. Uses MongoDB when `MONGODB_URI` is configured and reachable; otherwise falls back to in-memory storage (data is lost when the process stops).
+A full-stack Coupon Management application built with React, TypeScript, Node.js, Express, and MongoDB. The application allows users to create discount coupons, view existing coupons, and calculate discounted prices.
 
-## Requirements
-- Node.js 18+
-- npm
-- Optional: MongoDB local instance or MongoDB Atlas connection string
+## Features
 
-## Run locally
-```bash
-npm install
-cp .env.example .env
-# Optional: edit .env and set MONGODB_URI
-npm run dev
+- Create discount coupons
+- View previously created coupons
+- Set coupon expiry dates
+- Apply coupons to an order amount
+- Calculate discount and final price
+- React-based user interface
+- REST API built with Express
+- MongoDB integration for persistent storage
+
+## Tech Stack
+
+- Frontend: React, TypeScript, Vite
+- Backend: Node.js, Express
+- Database: MongoDB Atlas
+- Deployment: Vercel
+- Version Control: Git and GitHub
+
+## Live Application
+
+**Frontend:** Open your deployed React webpage using the frontend URL from your Vercel dashboard.
+
+**Backend API:**  
+https://coupon-api-project1-rf79.vercel.app
+
+## API Endpoints
+
+### 1. Get All Coupons
+
+**Method:** GET
+
+**Endpoint:**
+```text
+https://coupon-api-project1-rf79.vercel.app/coupons
 ```
-API starts at `http://localhost:3000`.
 
-For an in-memory run, remove/comment out `MONGODB_URI` in `.env`. If MongoDB is configured but unreachable, the app logs a warning and falls back to memory.
+Returns the list of existing coupons.
 
-## Endpoints
+Example response:
 
-### `POST /coupons`
+```json
+{
+  "coupons": [
+    {
+      "code": "AVD2",
+      "discountPercent": 10,
+      "expiresAt": "2027-12-31T23:59:59.000Z",
+      "createdAt": "2026-10-21T18:55:29.706Z"
+    }
+  ]
+}
+```
+
+The example is illustrative; actual results depend on the data stored in your database.
+
+### 2. Create a Coupon
+
+**Method:** POST
+
+**Endpoint:**
+```text
+https://coupon-api-project1-rf79.vercel.app/coupons
+```
+
+**Request body:**
+
 ```json
 {
   "code": "SAVE10",
@@ -28,53 +76,94 @@ For an in-memory run, remove/comment out `MONGODB_URI` in `.env`. If MongoDB is 
   "expiresAt": "2027-12-31T23:59:59.000Z"
 }
 ```
-Returns `201 Created`. Duplicate codes return `409`.
 
-### `GET /coupons`
-Returns `{ "coupons": [...] }`.
+Send the JSON body with the `Content-Type: application/json` header.
 
-### `POST /coupons/apply`
-```json
-{ "code": "SAVE10", "amount": 250 }
-```
-Example response:
-```json
-{
-  "message": "Coupon applied successfully",
-  "couponCode": "SAVE10",
-  "discountPercent": 10,
-  "originalAmount": 250,
-  "discountAmount": 25,
-  "finalAmount": 225
-}
+### 3. Apply a Coupon
+
+**Method:** POST
+
+**Endpoint:**
+```text
+https://coupon-api-project1-rf79.vercel.app/coupons/apply
 ```
 
-Errors:
-- `400` — missing amount, non-numeric amount, negative amount, missing coupon code, or expired coupon
-- `404` — coupon code does not exist
-- `409` — duplicate coupon code
-- `500` — unexpected server error
+Use the request fields required by your backend implementation, such as the coupon code and order amount.
 
-## Test with curl
-Create a coupon:
+## Run the Project Locally
+
+### Prerequisites
+
+Install the following:
+
+- Node.js and npm
+- Git
+- Visual Studio Code
+- A MongoDB Atlas account if using a remote database
+
+### Start the Backend
+
+1. Open the project in VS Code.
+2. Open a terminal and navigate to the backend directory.
+3. Install dependencies:
+
 ```bash
-curl -X POST http://localhost:3000/coupons \
-  -H 'Content-Type: application/json' \
-  -d '{"code":"SAVE10","discountPercent":10,"expiresAt":"2027-12-31T23:59:59.000Z"}'
-```
-Apply it:
-```bash
-curl -X POST http://localhost:3000/coupons/apply \
-  -H 'Content-Type: application/json' \
-  -d '{"code":"SAVE10","amount":250}'
-```
-List coupons:
-```bash
-curl http://localhost:3000/coupons
+npm install
 ```
 
-## Notes
-- Coupon codes are case-insensitive and stored in uppercase.
-- Amount must be a JSON number, e.g. `250`, not a string such as `"250"`.
-- The API validates the amount before looking up the coupon.
-- In-memory storage is intended for local development and demonstrations.
+4. Configure the environment variables required by your backend, including the MongoDB connection URI.
+5. Start the backend using the script defined in its `package.json`, for example:
+
+```bash
+npm start
+```
+
+Check the backend's `package.json` if that command is not available.
+
+### Start the Frontend
+
+Open a second terminal and navigate to the frontend directory:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite in the terminal, usually:
+
+```text
+http://localhost:5173
+```
+
+Make sure the frontend's API URL points to the backend you want to use.
+
+## Environment Variables
+
+Store secrets in environment variables rather than hardcoding them in source code.
+
+For example, your backend may use:
+
+```text
+MONGODB_URI=your_mongodb_connection_string
+```
+
+Use the exact variable name expected by your backend code. Do not commit `.env` files, database passwords, or API secrets to GitHub.
+
+For deployment, configure the required variables in the backend project's Vercel settings and redeploy.
+
+## GitHub Repository
+
+https://github.com/rajatxbajpai/coupon-api-project1
+
+## Future Improvements
+
+- Improved error handling and validation
+- Coupon usage limits
+- Authentication and authorization
+- Automated API tests
+- Better coupon management and reporting
+
+## Author
+
+Developed as a full-stack development project to practise React, REST APIs, backend development, database integration, and deployment.
