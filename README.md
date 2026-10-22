@@ -23,10 +23,10 @@ A full-stack Coupon Management application built with React, TypeScript, Node.js
 
 ## Live Application
 
-**Frontend:** Open your deployed React webpage using the frontend URL from your Vercel dashboard.
+**Frontend:** 
+https://coupon-api-project1.vercel.app/
 
-**Backend API:**  
-https://coupon-api-project1-rf79.vercel.app
+
 
 ## API Endpoints
 
